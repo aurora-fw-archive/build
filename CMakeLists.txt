@@ -75,6 +75,8 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
     include(${APP_TESTS_CRYPTO_DIR}/app.cmake APP_TESTS_CRYPTO_DIR)
     set(APP_TESTS_CLI_DIR ${APPS_DIR}/tests/cli)
     include(${APP_TESTS_CLI_DIR}/app.cmake APP_TESTS_CLI_DIR)
+    set(APP_TESTS_MATH_DIR ${APPS_DIR}/tests/math)
+    include(${APP_TESTS_MATH_DIR}/app.cmake APP_TESTS_MATH_DIR)
 endif()
 
 message(STATUS "Build system loaded")
