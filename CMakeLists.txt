@@ -36,6 +36,10 @@ include_directories(${BUILD_DIR}/include)
 # Modules
 set(MODULE_MATH_DIR ${MODULES_DIR}/math)
 include(${MODULE_MATH_DIR}/module.cmake MODULE_MATH_DIR)
+set(MODULE_CRYPTO_DIR ${MODULES_DIR}/crypto)
+include(${MODULE_CRYPTO_DIR}/module.cmake MODULE_CRYPTO_DIR)
+set(MODULE_TLIB_DIR ${MODULES_DIR}/tlib)
+include(${MODULE_TLIB_DIR}/module.cmake MODULE_TLIB_DIR)
 
 #Graphics Engine
 set(MODULE_GENGINE_CORE_DIR ${MODULES_DIR}/gengine/core)
