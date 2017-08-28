@@ -58,6 +58,11 @@
 #include <Aurora/GEngine/API.h>
 #include <Aurora/GEngine/OpenGL.h>
 
+//Math
+#include <Aurora/Math/Vector2D.h>
+#include <Aurora/Math/Vector3D.h>
+#include <Aurora/Math/Vector4D.h>
+
 //#include <Aurora/Info/GPU.h>
 //#include <Aurora/Info/CPU.h>
 //#include <Aurora/Info/System.h>
