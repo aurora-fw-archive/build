@@ -45,7 +45,6 @@
 // Lib
 #include <Aurora/TLib/Target.h>
 #include <Aurora/TLib/Type.h>
-#include <Aurora/TLib/IOStream.h>
 #include <Aurora/TLib/Endian.h>
 #include <Aurora/TLib/String.h>
 
@@ -58,8 +57,6 @@
 #include <Aurora/GEngine/Window.h>
 #include <Aurora/GEngine/API.h>
 #include <Aurora/GEngine/OpenGL.h>
-#include <Aurora/GEngine/Vulkan.h>
-#include <Aurora/GEngine/Direct3D.h>
 
 //#include <Aurora/Info/GPU.h>
 //#include <Aurora/Info/CPU.h>

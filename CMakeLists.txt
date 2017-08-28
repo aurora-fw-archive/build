@@ -6,7 +6,7 @@
 #  More information in: https://github.com/ljmf00/ (Github Page)
 
 # Set minimum version of cmake required to build this project
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 project (aurorafw)
 
 message(STATUS "Starting framework build system...")
@@ -17,6 +17,8 @@ message("┴ ┴└─┘┴└─└─┘┴└─┴ ┴  └  ┴└─┴ �
 #General Flags
 if (NOT CONFIGURED_ONCE)
     add_definitions(-DAURORA_IS_COMPILING)
+    set_property(GLOBAL PROPERTY CXX_STANDARD 17)
+    set_property(GLOBAL PROPERTY CXX_STANDARD_REQUIRED ON)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g3 -Wall -Wextra -w -std=c++17")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -g0 -std=c++17")
     set(ROOT_DIR ${CMAKE_SOURCE_DIR}/..)
