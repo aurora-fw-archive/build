@@ -79,4 +79,26 @@ if((CMAKE_BUILD_TYPE MATCHES Debug) OR (AURORA_BUILD_TEST_APPS))
     include(${APP_TESTS_MATH_DIR}/app.cmake APP_TESTS_MATH_DIR)
 endif()
 
+if(AURORA_BUILD_DOCS)
+    FIND_PACKAGE(Doxygen REQUIRED)
+
+    IF (DOXYGEN_FOUND)
+        SET(DOXYGEN_INPUT ${ROOT_DIR}/docs/Doxyfile)
+        SET(DOXYGEN_OUTPUT ${ROOT_DIR}/docs)
+
+        ADD_CUSTOM_COMMAND(OUTPUT ${DOXYGEN_OUTPUT}
+                           COMMAND ${CMAKE_COMMAND} -E echo_append "Building Documentation..."
+                           COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
+                           COMMAND ${CMAKE_COMMAND} -E echo "Done."
+                           WORKING_DIRECTORY ${DOXYGEN_OUTPUT}
+                           DEPENDS ${DOXYGEN_INPUT})
+        ADD_CUSTOM_TARGET(doc ALL DEPENDS ${DOXYGEN_OUTPUT})
+        ADD_CUSTOM_TARGET(doc_forced
+                          COMMAND ${CMAKE_COMMAND} -E echo_append "Building Documentation..."
+                          COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
+                          COMMAND ${CMAKE_COMMAND} -E echo "Done."
+                          WORKING_DIRECTORY ${DOXYGEN_OUTPUT})
+    ENDIF (DOXYGEN_FOUND)
+endif()
+
 message(STATUS "Build system loaded")
