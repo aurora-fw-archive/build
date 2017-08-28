@@ -84,16 +84,9 @@ if(AURORA_BUILD_DOCS)
 
     IF (DOXYGEN_FOUND)
         SET(DOXYGEN_INPUT ${ROOT_DIR}/docs/Doxyfile)
-        SET(DOXYGEN_OUTPUT ${ROOT_DIR}/docs)
+        SET(DOXYGEN_OUTPUT ${ROOT_DIR}/docs/)
 
-        ADD_CUSTOM_COMMAND(OUTPUT ${DOXYGEN_OUTPUT}
-                           COMMAND ${CMAKE_COMMAND} -E echo_append "Building Documentation..."
-                           COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
-                           COMMAND ${CMAKE_COMMAND} -E echo "Done."
-                           WORKING_DIRECTORY ${DOXYGEN_OUTPUT}
-                           DEPENDS ${DOXYGEN_INPUT})
-        ADD_CUSTOM_TARGET(doc ALL DEPENDS ${DOXYGEN_OUTPUT})
-        ADD_CUSTOM_TARGET(doc_forced
+        ADD_CUSTOM_TARGET(documentation
                           COMMAND ${CMAKE_COMMAND} -E echo_append "Building Documentation..."
                           COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
                           COMMAND ${CMAKE_COMMAND} -E echo "Done."
