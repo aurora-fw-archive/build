@@ -1,14 +1,23 @@
-# -*- CMake -*-
-# ┌─┐┬ ┬┬─┐┌─┐┬─┐┌─┐  ┌─┐┬─┐┌─┐┌┬┐┌─┐┬ ┬┌─┐┬─┐┬┌─ | Powerful, Scalable and Cross Platform Framework
-# ├─┤│ │├┬┘│ │├┬┘├─┤  ├┤ ├┬┘├─┤│││├┤ ││││ │├┬┘├┴┐ | @author Luís Ferreira
-# ┴ ┴└─┘┴└─└─┘┴└─┴ ┴  └  ┴└─┴ ┴┴ ┴└─┘└┴┘└─┘┴└─┴ ┴ | @license GNU Public License v3
-#  Copyright (c) 2016 - Luís Ferreira. All right reserved
-#  More information in: https://github.com/ljmf00/ (Github Page)
+# ┌─┐┬ ┬┬─┐┌─┐┬─┐┌─┐  ┌─┐┬─┐┌─┐┌┬┐┌─┐┬ ┬┌─┐┬─┐┬┌─
+# ├─┤│ │├┬┘│ │├┬┘├─┤  ├┤ ├┬┘├─┤│││├┤ ││││ │├┬┘├┴┐
+# ┴ ┴└─┘┴└─└─┘┴└─┴ ┴  └  ┴└─┴ ┴┴ ┴└─┘└┴┘└─┘┴└─┴ ┴
+# A Powerful General Purpose Framework
+# More information in: https://aurora-fw.github.io/
+#
+# Copyright (C) 2017 Aurora Framework, All rights reserved.
+#
+# This file is part of the Aurora Framework. This framework is free
+# software; you can redistribute it and/or modify it under the terms of
+# the GNU Lesser General Public License version 3 as published by the
+# Free Software Foundation and appearing in the file LICENSE included in
+# the packaging of this file. Please review the following information to
+# ensure the GNU Lesser General Public License version 3 requirements
+# will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
 
-# Set minimum version of cmake required to build this project
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 project (aurorafw)
 
+#Greetings
 message(STATUS "Starting framework build system...")
 message("┌─┐┬ ┬┬─┐┌─┐┬─┐┌─┐  ┌─┐┬─┐┌─┐┌┬┐┌─┐┬ ┬┌─┐┬─┐┬┌─")
 message("├─┤│ │├┬┘│ │├┬┘├─┤  ├┤ ├┬┘├─┤│││├┤ ││││ │├┬┘├┴┐")
@@ -18,15 +27,22 @@ message("More information in: https://aurora-fw.github.io/\n")
 
 #General Flags
 if (NOT CONFIGURED_ONCE)
+    #Add flag for AFW_PREFIX
     add_definitions(-DAURORA_IS_COMPILING)
+    #C++ 17 Standard Revision
     set_property(GLOBAL PROPERTY CXX_STANDARD 17)
     set_property(GLOBAL PROPERTY CXX_STANDARD_REQUIRED ON)
+    #Add custom flags to the CXX compiler
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g3 -Wall -Wextra -Weffc++ -Wformat -pedantic -Wchkp -Wdouble-promotion -std=c++17")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -g0 -Werror -std=c++17")
+
+    #Aurora specific flags
     set(AURORAFW_ROOT_DIR ${CMAKE_SOURCE_DIR}/..)
     set(AURORAFW_BUILD_DIR ${AURORAFW_ROOT_DIR}/build)
     set(AURORAFW_MODULES_DIR ${AURORAFW_ROOT_DIR}/modules)
-    set(APPS_DIR ${AURORAFW_ROOT_DIR}/apps)
+    set(AURORAFW_APPS_DIR ${AURORAFW_ROOT_DIR}/apps)
+
+    #Define output directory
     if(CMAKE_BUILD_TYPE MATCHES Debug)
         set(LIBRARY_OUTPUT_PATH ${AURORAFW_ROOT_DIR}/bin/dbg)
         set(EXECUTABLE_OUTPUT_PATH ${AURORAFW_ROOT_DIR}/bin/dbg)
@@ -36,6 +52,7 @@ if (NOT CONFIGURED_ONCE)
     endif()
 endif()
 
+#Add Global Aurora include directory
 include_directories(${AURORAFW_BUILD_DIR}/include)
 
 # Modules
@@ -66,23 +83,24 @@ include(${AURORAFW_MODULE_GENGINE_VULKAN_DIR}/module.cmake AURORAFW_MODULE_GENGI
 set(AURORAFW_MODULE_GENGINE_DIRECT3D_DIR ${AURORAFW_MODULES_DIR}/gengine/direct3d)
 include(${AURORAFW_MODULE_GENGINE_DIRECT3D_DIR}/module.cmake AURORAFW_MODULE_GENGINE_DIRECT3D_DIR)
 
+#Test Apps
 if((CMAKE_BUILD_TYPE MATCHES Debug) OR (AURORA_BUILD_TEST_APPS))
-    set(AURORAFW_APP_TESTS_TLIB_DIR ${APPS_DIR}/tests/tlib)
+    set(AURORAFW_APP_TESTS_TLIB_DIR ${AURORAFW_APPS_DIR}/tests/tlib)
     include(${AURORAFW_APP_TESTS_TLIB_DIR}/app.cmake AURORAFW_APP_TESTS_TLIB_DIR)
-    set(AURORAFW_APP_TESTS_GUI_DIR ${APPS_DIR}/tests/gui)
+    set(AURORAFW_APP_TESTS_GUI_DIR ${AURORAFW_APPS_DIR}/tests/gui)
     include(${AURORAFW_APP_TESTS_GUI_DIR}/app.cmake AURORAFW_APP_TESTS_GUI_DIR)
-    set(AURORAFW_APP_TESTS_GENGINE_DIR ${APPS_DIR}/tests/gengine)
+    set(AURORAFW_APP_TESTS_GENGINE_DIR ${AURORAFW_APPS_DIR}/tests/gengine)
     include(${AURORAFW_APP_TESTS_GENGINE_DIR}/app.cmake AURORAFW_APP_TESTS_GENGINE_DIR)
-    set(AURORAFW_APP_TESTS_CRYPTO_DIR ${APPS_DIR}/tests/crypto)
+    set(AURORAFW_APP_TESTS_CRYPTO_DIR ${AURORAFW_APPS_DIR}/tests/crypto)
     include(${AURORAFW_APP_TESTS_CRYPTO_DIR}/app.cmake AURORAFW_APP_TESTS_CRYPTO_DIR)
-    set(AURORAFW_APP_TESTS_CLI_DIR ${APPS_DIR}/tests/cli)
+    set(AURORAFW_APP_TESTS_CLI_DIR ${AURORAFW_APPS_DIR}/tests/cli)
     include(${AURORAFW_APP_TESTS_CLI_DIR}/app.cmake AURORAFW_APP_TESTS_CLI_DIR)
-    set(AURORAFW_APP_TESTS_MATH_DIR ${APPS_DIR}/tests/math)
+    set(AURORAFW_APP_TESTS_MATH_DIR ${AURORAFW_APPS_DIR}/tests/math)
     include(${AURORAFW_APP_TESTS_MATH_DIR}/app.cmake AURORAFW_APP_TESTS_MATH_DIR)
 endif()
 
+#Doxygen specific configuration
 FIND_PACKAGE(Doxygen)
-
 IF (DOXYGEN_FOUND)
     SET(DOXYGEN_INPUT ${AURORAFW_ROOT_DIR}/docs/Doxyfile)
     SET(DOXYGEN_OUTPUT ${AURORAFW_ROOT_DIR}/docs/)
