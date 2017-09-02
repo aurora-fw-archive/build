@@ -1,6 +1,3 @@
-# build
-
-```cpp
 /****************************************************************************
 ** ┌─┐┬ ┬┬─┐┌─┐┬─┐┌─┐  ┌─┐┬─┐┌─┐┌┬┐┌─┐┬ ┬┌─┐┬─┐┬┌─
 ** ├─┤│ │├┬┘│ │├┬┘├─┤  ├┤ ├┬┘├─┤│││├┤ ││││ │├┬┘├┴┐
@@ -18,13 +15,25 @@
 ** ensure the GNU Lesser General Public License version 3 requirements
 ** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
 ****************************************************************************/
-```
 
-To build the project run this commands on repo root folder:
+#ifndef AURORAFW_GLOBAL_H
+#define AURORAFW_GLOBAL_H
 
-```
-$ cmake build/
-$ make
-```
+#include <AuroraFW/TLib/Type.h>
+#include <AuroraFW/TLib/Target/Platform.h>
 
-For Debug mode use this cmake flag: `-DCMAKE_BUILD_TYPE=Debug`
+#ifndef AURORAFW_
+#define AURORAFW_
+#endif // AURORAFW_
+
+#ifdef AFW_TARGET_PLATFORM_WINDOWS
+	#ifdef AURORAFW_IS_COMPILING
+		#define AFW_PREFIX __declspec(dllexport)
+	#else
+		#define AFW_PREFIX __declspec(dllimport)
+	#endif //AURORAFW_IS_COMPILING
+#else
+	#define AFW_PREFIX
+#endif //AFW_TARGET_PLATFORM_WINDOWS
+
+#endif // AURORAFW_GLOBAL_H
