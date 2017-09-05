@@ -33,7 +33,7 @@ if (NOT CONFIGURED_ONCE)
     set_property(GLOBAL PROPERTY CXX_STANDARD 17)
     set_property(GLOBAL PROPERTY CXX_STANDARD_REQUIRED ON)
     #Add custom flags to the CXX compiler
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g3 -Wall -Wextra -Weffc++ -Wformat -pedantic -Wchkp -Wdouble-promotion -std=c++17")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g3 -Wall -Wextra -Wformat -pedantic -Wchkp -Wdouble-promotion -std=c++17")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -g0 -Werror -std=c++17")
 
     #Aurora specific flags
