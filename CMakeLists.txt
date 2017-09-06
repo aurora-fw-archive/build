@@ -49,8 +49,6 @@ if (NOT CONFIGURED_ONCE)
     set(AURORAFW_APPS_DIR ${AURORAFW_ROOT_DIR}/apps)
 
     #Define output directory
-    set(CMAKE_CACHEFILE_DIR ${AURORAFW_ROOT_DIR}/.build)
-
     if(CMAKE_BUILD_TYPE MATCHES Debug)
         set(LIBRARY_OUTPUT_PATH ${AURORAFW_ROOT_DIR}/bin/dbg)
         set(EXECUTABLE_OUTPUT_PATH ${AURORAFW_ROOT_DIR}/bin/dbg)
