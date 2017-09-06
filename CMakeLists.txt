@@ -25,8 +25,14 @@ message("┴ ┴└─┘┴└─└─┘┴└─┴ ┴  └  ┴└─┴ �
 message("A Powerful General Purpose Framework")
 message("More information in: https://aurora-fw.github.io/\n")
 
+option(AURORA_BUILD_TEST_APPS "Enable builds for test apps" OFF)
+option(AURORA_TARGET_DOCUMENTATION "Enable documentation target" ON)
+
 #General Flags
 if (NOT CONFIGURED_ONCE)
+    if(CMAKE_GENERATOR MATCHES "Ninja")
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fdiagnostics-color")
+    endif()
     #Add flag for AFW_PREFIX
     add_definitions(-DAURORA_IS_COMPILING)
     #C++ 17 Standard Revision
@@ -43,6 +49,8 @@ if (NOT CONFIGURED_ONCE)
     set(AURORAFW_APPS_DIR ${AURORAFW_ROOT_DIR}/apps)
 
     #Define output directory
+    set(CMAKE_CACHEFILE_DIR ${AURORAFW_ROOT_DIR}/.build)
+
     if(CMAKE_BUILD_TYPE MATCHES Debug)
         set(LIBRARY_OUTPUT_PATH ${AURORAFW_ROOT_DIR}/bin/dbg)
         set(EXECUTABLE_OUTPUT_PATH ${AURORAFW_ROOT_DIR}/bin/dbg)
@@ -86,7 +94,7 @@ set(AURORAFW_MODULE_GENGINE_DIRECT3D_DIR ${AURORAFW_MODULES_DIR}/gengine/direct3
 include(${AURORAFW_MODULE_GENGINE_DIRECT3D_DIR}/module.cmake AURORAFW_MODULE_GENGINE_DIRECT3D_DIR)
 
 #Test Apps
-if((CMAKE_BUILD_TYPE MATCHES Debug) OR (AURORA_BUILD_TEST_APPS))
+if((CMAKE_BUILD_TYPE MATCHES Debug) AND (AURORA_BUILD_TEST_APPS))
     set(AURORAFW_APP_TESTS_TLIB_DIR ${AURORAFW_APPS_DIR}/tests/tlib)
     include(${AURORAFW_APP_TESTS_TLIB_DIR}/app.cmake AURORAFW_APP_TESTS_TLIB_DIR)
     set(AURORAFW_APP_TESTS_GUI_DIR ${AURORAFW_APPS_DIR}/tests/gui)
@@ -103,6 +111,7 @@ if((CMAKE_BUILD_TYPE MATCHES Debug) OR (AURORA_BUILD_TEST_APPS))
     include(${AURORAFW_APP_TESTS_NETSOCKS_DIR}/app.cmake AURORAFW_APP_TESTS_NETSOCKS_DIR)
 endif()
 
+if(AURORA_TARGET_DOCUMENTATION)
 #Doxygen specific configuration
 FIND_PACKAGE(Doxygen)
 IF (DOXYGEN_FOUND)
@@ -115,5 +124,6 @@ IF (DOXYGEN_FOUND)
                       COMMAND ${CMAKE_COMMAND} -E echo "Done."
                       WORKING_DIRECTORY ${DOXYGEN_OUTPUT})
 ENDIF (DOXYGEN_FOUND)
+endif()
 
 message(STATUS "Build system loaded")
