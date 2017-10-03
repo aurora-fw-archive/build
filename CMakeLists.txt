@@ -17,54 +17,18 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 project (aurorafw)
 
-#Greetings
 message(STATUS "Starting framework build system...")
-message("┌─┐┬ ┬┬─┐┌─┐┬─┐┌─┐  ┌─┐┬─┐┌─┐┌┬┐┌─┐┬ ┬┌─┐┬─┐┬┌─")
-message("├─┤│ │├┬┘│ │├┬┘├─┤  ├┤ ├┬┘├─┤│││├┤ ││││ │├┬┘├┴┐")
-message("┴ ┴└─┘┴└─└─┘┴└─┴ ┴  └  ┴└─┴ ┴┴ ┴└─┘└┴┘└─┘┴└─┴ ┴")
-message("A Powerful General Purpose Framework")
-message("More information in: https://aurora-fw.github.io/\n")
+
+include(${CMAKE_SOURCE_DIR}/build/aurora-config.cmake)
+
+if (NOT CONFIGURED_ONCE)
+	set(AURORAFW_BUILD_DIR ${AURORAFW_ROOT_DIR}/build)
+	set(AURORAFW_MODULES_DIR ${AURORAFW_ROOT_DIR}/modules)
+	set(AURORAFW_APPS_DIR ${AURORAFW_ROOT_DIR}/apps)
+endif()
 
 option(AURORA_BUILD_TEST_APPS "Enable builds for test apps" OFF)
 option(AURORA_TARGET_DOCUMENTATION "Enable documentation target" ON)
-
-#General Flags
-if (NOT CONFIGURED_ONCE)
-    if(CMAKE_GENERATOR MATCHES "Ninja")
-        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fdiagnostics-color")
-    endif()
-    #Add flag for AFW_PREFIX
-    add_definitions(-DAURORA_IS_COMPILING)
-    #C++ 17 Standard Revision
-    set_property(GLOBAL PROPERTY CXX_STANDARD 17)
-    set_property(GLOBAL PROPERTY CXX_STANDARD_REQUIRED ON)
-    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-        #Add custom flags to the CXX compiler
-        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g3 -Wall -Wextra -Wformat -pedantic -Wdouble-promotion -std=c++17")
-        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -g0 -Werror -std=c++17")
-    elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        #Add custom flags to the CXX compiler
-        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g3 -Wall -Wextra -Wformat -pedantic -Wdouble-promotion -std=c++1z")
-        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -g0 -Werror -std=c++1z")
-    endif()
-    #Aurora specific flags
-    set(AURORAFW_ROOT_DIR ${CMAKE_SOURCE_DIR})
-    set(AURORAFW_BUILD_DIR ${AURORAFW_ROOT_DIR}/build)
-    set(AURORAFW_MODULES_DIR ${AURORAFW_ROOT_DIR}/modules)
-    set(AURORAFW_APPS_DIR ${AURORAFW_ROOT_DIR}/apps)
-
-    #Define output directory
-    if(CMAKE_BUILD_TYPE MATCHES Debug)
-        set(LIBRARY_OUTPUT_PATH ${AURORAFW_ROOT_DIR}/bin/dbg)
-        set(EXECUTABLE_OUTPUT_PATH ${AURORAFW_ROOT_DIR}/bin/dbg)
-    else()
-        set(LIBRARY_OUTPUT_PATH ${AURORAFW_ROOT_DIR}/bin)
-        set(EXECUTABLE_OUTPUT_PATH ${AURORAFW_ROOT_DIR}/bin)
-    endif()
-endif()
-
-#Add Global Aurora include directory
-include_directories(${AURORAFW_BUILD_DIR}/include)
 
 # Modules
 set(AURORAFW_MODULE_MATH_DIR ${AURORAFW_MODULES_DIR}/math)
@@ -98,34 +62,34 @@ include(${AURORAFW_MODULE_GENGINE_DIRECT3D_DIR}/module.cmake)
 
 #Test Apps
 if((CMAKE_BUILD_TYPE MATCHES Debug) AND (AURORA_BUILD_TEST_APPS))
-    set(AURORAFW_APP_TESTS_TLIB_DIR ${AURORAFW_APPS_DIR}/tests/tlib)
-    include(${AURORAFW_APP_TESTS_TLIB_DIR}/app.cmake)
-    set(AURORAFW_APP_TESTS_GUI_DIR ${AURORAFW_APPS_DIR}/tests/gui)
-    include(${AURORAFW_APP_TESTS_GUI_DIR}/app.cmake)
-    set(AURORAFW_APP_TESTS_GENGINE_DIR ${AURORAFW_APPS_DIR}/tests/gengine)
-    include(${AURORAFW_APP_TESTS_GENGINE_DIR}/app.cmake)
-    set(AURORAFW_APP_TESTS_CRYPTO_DIR ${AURORAFW_APPS_DIR}/tests/crypto)
-    include(${AURORAFW_APP_TESTS_CRYPTO_DIR}/app.cmake)
-    set(AURORAFW_APP_TESTS_CLI_DIR ${AURORAFW_APPS_DIR}/tests/cli)
-    include(${AURORAFW_APP_TESTS_CLI_DIR}/app.cmake)
-    set(AURORAFW_APP_TESTS_MATH_DIR ${AURORAFW_APPS_DIR}/tests/math)
-    include(${AURORAFW_APP_TESTS_MATH_DIR}/app.cmake)
-    set(AURORAFW_APP_TESTS_NETSOCKS_DIR ${AURORAFW_APPS_DIR}/tests/netsocks)
-    include(${AURORAFW_APP_TESTS_NETSOCKS_DIR}/app.cmake)
+	set(AURORAFW_APP_TESTS_TLIB_DIR ${AURORAFW_APPS_DIR}/tests/tlib)
+	include(${AURORAFW_APP_TESTS_TLIB_DIR}/app.cmake)
+	set(AURORAFW_APP_TESTS_GUI_DIR ${AURORAFW_APPS_DIR}/tests/gui)
+	include(${AURORAFW_APP_TESTS_GUI_DIR}/app.cmake)
+	set(AURORAFW_APP_TESTS_GENGINE_DIR ${AURORAFW_APPS_DIR}/tests/gengine)
+	include(${AURORAFW_APP_TESTS_GENGINE_DIR}/app.cmake)
+	set(AURORAFW_APP_TESTS_CRYPTO_DIR ${AURORAFW_APPS_DIR}/tests/crypto)
+	include(${AURORAFW_APP_TESTS_CRYPTO_DIR}/app.cmake)
+	set(AURORAFW_APP_TESTS_CLI_DIR ${AURORAFW_APPS_DIR}/tests/cli)
+	include(${AURORAFW_APP_TESTS_CLI_DIR}/app.cmake)
+	set(AURORAFW_APP_TESTS_MATH_DIR ${AURORAFW_APPS_DIR}/tests/math)
+	include(${AURORAFW_APP_TESTS_MATH_DIR}/app.cmake)
+	set(AURORAFW_APP_TESTS_NETSOCKS_DIR ${AURORAFW_APPS_DIR}/tests/netsocks)
+	include(${AURORAFW_APP_TESTS_NETSOCKS_DIR}/app.cmake)
 endif()
 
 if(AURORA_TARGET_DOCUMENTATION)
 #Doxygen specific configuration
 FIND_PACKAGE(Doxygen)
 IF (DOXYGEN_FOUND)
-    SET(DOXYGEN_INPUT ${AURORAFW_ROOT_DIR}/docs/Doxyfile)
-    SET(DOXYGEN_OUTPUT ${AURORAFW_ROOT_DIR}/docs/)
+	SET(DOXYGEN_INPUT ${AURORAFW_ROOT_DIR}/docs/Doxyfile)
+	SET(DOXYGEN_OUTPUT ${AURORAFW_ROOT_DIR}/docs/)
 
-    ADD_CUSTOM_TARGET(documentation
-                      COMMAND ${CMAKE_COMMAND} -E echo_append "Building Documentation..."
-                      COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
-                      COMMAND ${CMAKE_COMMAND} -E echo "Done."
-                      WORKING_DIRECTORY ${DOXYGEN_OUTPUT})
+	ADD_CUSTOM_TARGET(documentation
+					  COMMAND ${CMAKE_COMMAND} -E echo_append "Building Documentation..."
+					  COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
+					  COMMAND ${CMAKE_COMMAND} -E echo "Done."
+					  WORKING_DIRECTORY ${DOXYGEN_OUTPUT})
 ENDIF (DOXYGEN_FOUND)
 endif()
 
