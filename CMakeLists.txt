@@ -14,7 +14,7 @@
 # ensure the GNU Lesser General Public License version 3 requirements
 # will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
 
-cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 project (aurorafw)
 
 message(STATUS "Starting framework build system...")
@@ -29,22 +29,23 @@ endif()
 
 option(AURORA_BUILD_TEST_APPS "Enable builds for test apps" OFF)
 option(AURORA_TARGET_DOCUMENTATION "Enable documentation target" ON)
+option(AURORA_DOCUMENTATION_AUTO "Enable automatic documentation building" ON)
 
 # Modules
+set(AURORAFW_MODULE_STDL_DIR ${AURORAFW_MODULES_DIR}/tlib)
+include(${AURORAFW_MODULE_STDL_DIR}/module.cmake)
+set(AURORAFW_MODULE_CORE_DIR ${AURORAFW_MODULES_DIR}/core)
+include(${AURORAFW_MODULE_CORE_DIR}/module.cmake)
 set(AURORAFW_MODULE_MATH_DIR ${AURORAFW_MODULES_DIR}/math)
 include(${AURORAFW_MODULE_MATH_DIR}/module.cmake)
 set(AURORAFW_MODULE_CRYPTO_DIR ${AURORAFW_MODULES_DIR}/crypto)
 include(${AURORAFW_MODULE_CRYPTO_DIR}/module.cmake)
-set(AURORAFW_MODULE_TLIB_DIR ${AURORAFW_MODULES_DIR}/tlib)
-include(${AURORAFW_MODULE_TLIB_DIR}/module.cmake)
 set(AURORAFW_MODULE_IO_DIR ${AURORAFW_MODULES_DIR}/io)
 include(${AURORAFW_MODULE_IO_DIR}/module.cmake)
 set(AURORAFW_MODULE_CLI_DIR ${AURORAFW_MODULES_DIR}/cli)
 include(${AURORAFW_MODULE_CLI_DIR}/module.cmake)
 set(AURORAFW_MODULE_GUI_DIR ${AURORAFW_MODULES_DIR}/gui)
 include(${AURORAFW_MODULE_GUI_DIR}/module.cmake)
-set(AURORAFW_MODULE_CORE_DIR ${AURORAFW_MODULES_DIR}/core)
-include(${AURORAFW_MODULE_CORE_DIR}/module.cmake)
 set(AURORAFW_MODULE_AUDIO_DIR ${AURORAFW_MODULES_DIR}/audio)
 include(${AURORAFW_MODULE_AUDIO_DIR}/module.cmake)
 set(AURORAFW_MODULE_NETSOCKS_DIR ${AURORAFW_MODULES_DIR}/netsocks)
@@ -61,9 +62,9 @@ set(AURORAFW_MODULE_GENGINE_DIRECT3D_DIR ${AURORAFW_MODULES_DIR}/gengine/direct3
 include(${AURORAFW_MODULE_GENGINE_DIRECT3D_DIR}/module.cmake)
 
 #Test Apps
-if((CMAKE_BUILD_TYPE MATCHES Debug) AND (AURORA_BUILD_TEST_APPS))
-	set(AURORAFW_APP_TESTS_TLIB_DIR ${AURORAFW_APPS_DIR}/tests/tlib)
-	include(${AURORAFW_APP_TESTS_TLIB_DIR}/app.cmake)
+if((CMAKE_BUILD_TYPE MATCHES Debug) OR (AURORA_BUILD_TEST_APPS))
+	set(AURORAFW_APP_TESTS_STDL_DIR ${AURORAFW_APPS_DIR}/tests/tlib)
+	include(${AURORAFW_APP_TESTS_STDL_DIR}/app.cmake)
 	set(AURORAFW_APP_TESTS_GUI_DIR ${AURORAFW_APPS_DIR}/tests/gui)
 	include(${AURORAFW_APP_TESTS_GUI_DIR}/app.cmake)
 	set(AURORAFW_APP_TESTS_GENGINE_DIR ${AURORAFW_APPS_DIR}/tests/gengine)
@@ -81,16 +82,36 @@ endif()
 if(AURORA_TARGET_DOCUMENTATION)
 #Doxygen specific configuration
 FIND_PACKAGE(Doxygen)
-IF (DOXYGEN_FOUND)
-	SET(DOXYGEN_INPUT ${AURORAFW_ROOT_DIR}/docs/Doxyfile)
-	SET(DOXYGEN_OUTPUT ${AURORAFW_ROOT_DIR}/docs/)
+	IF (DOXYGEN_FOUND)
+		SET(DOXYGEN_INPUT ${AURORAFW_ROOT_DIR}/docs/Doxyfile)
+		SET(DOXYGEN_DIR ${AURORAFW_ROOT_DIR}/docs)
+		set(DOXYGEN_OUTPUT "${DOXYGEN_DIR}/.out_html;${DOXYGEN_DIR}/.out_xml;${DOXYGEN_DIR}/.out_latex;${DOXYGEN_DIR}/.out_docbook;${DOXYGEN_DIR}/.out_man;${DOXYGEN_DIR}/.out_rtf")
+		file(GLOB_RECURSE DOXYGEN_DEPENDS ${AURORAFW_MODULES_DIR}
+			*.cpp *.c *.h *.hpp *.md)
 
-	ADD_CUSTOM_TARGET(documentation
-					  COMMAND ${CMAKE_COMMAND} -E echo_append "Building Documentation..."
-					  COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
-					  COMMAND ${CMAKE_COMMAND} -E echo "Done."
-					  WORKING_DIRECTORY ${DOXYGEN_OUTPUT})
-ENDIF (DOXYGEN_FOUND)
+		ADD_CUSTOM_COMMAND(OUTPUT ${DOXYGEN_OUTPUT}
+						COMMENT "Building Documentation"
+						COMMAND ${CMAKE_COMMAND} -E echo_append "Building Documentation..."
+						COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
+						COMMAND ${CMAKE_COMMAND} -E echo "Done."
+						WORKING_DIRECTORY ${DOXYGEN_DIR}
+						DEPENDS ${DOXYGEN_DEPENDS})
+
+		ADD_CUSTOM_TARGET(doxygen ALL
+						WORKING_DIRECTORY ${DOXYGEN_DIR}
+						DEPENDS ${DOXYGEN_OUTPUT})
+		
+		ADD_CUSTOM_TARGET(documentation
+						COMMENT "Building Documentation"
+						COMMAND ${CMAKE_COMMAND} -E echo_append "Building Documentation..."
+						COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
+						COMMAND ${CMAKE_COMMAND} -E echo "Done."
+						WORKING_DIRECTORY ${DOXYGEN_DIR})
+		
+		ADD_CUSTOM_TARGET(clean-docs COMMAND rm -rf "${DOXYGEN_DIR}/.out_*/*")
+		ADD_CUSTOM_TARGET(clear COMMAND ${CMAKE_BUILD_TOOL} clean)
+		add_dependencies(clear clean-docs)
+	ENDIF (DOXYGEN_FOUND)
 endif()
 
 message(STATUS "Build system loaded")
