@@ -89,18 +89,20 @@ FIND_PACKAGE(Doxygen)
 		file(GLOB_RECURSE DOXYGEN_DEPENDS ${AURORAFW_MODULES_DIR}
 			*.cpp *.c *.h *.hpp *.md)
 
-		ADD_CUSTOM_COMMAND(OUTPUT ${DOXYGEN_OUTPUT}
-						COMMENT "Building Documentation"
-						COMMAND ${CMAKE_COMMAND} -E echo_append "Building Documentation..."
-						COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
-						COMMAND ${CMAKE_COMMAND} -E echo "Done."
-						WORKING_DIRECTORY ${DOXYGEN_DIR}
-						DEPENDS ${DOXYGEN_DEPENDS})
+		if(AURORA_DOCUMENTATION_AUTO)
+			ADD_CUSTOM_COMMAND(OUTPUT ${DOXYGEN_OUTPUT}
+							COMMENT "Building Documentation"
+							COMMAND ${CMAKE_COMMAND} -E echo_append "Building Documentation..."
+							COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_INPUT}
+							COMMAND ${CMAKE_COMMAND} -E echo "Done."
+							WORKING_DIRECTORY ${DOXYGEN_DIR}
+							DEPENDS ${DOXYGEN_DEPENDS})
 
-		ADD_CUSTOM_TARGET(doxygen ALL
-						WORKING_DIRECTORY ${DOXYGEN_DIR}
-						DEPENDS ${DOXYGEN_OUTPUT})
-		
+			ADD_CUSTOM_TARGET(doxygen ALL
+							WORKING_DIRECTORY ${DOXYGEN_DIR}
+							DEPENDS ${DOXYGEN_OUTPUT})
+		endif()
+
 		ADD_CUSTOM_TARGET(documentation
 						COMMENT "Building Documentation"
 						COMMAND ${CMAKE_COMMAND} -E echo_append "Building Documentation..."
