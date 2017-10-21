@@ -32,7 +32,7 @@ option(AURORA_TARGET_DOCUMENTATION "Enable documentation target" ON)
 option(AURORA_DOCUMENTATION_AUTO "Enable automatic documentation building" ON)
 
 # Modules
-set(AURORAFW_MODULE_STDL_DIR ${AURORAFW_MODULES_DIR}/tlib)
+set(AURORAFW_MODULE_STDL_DIR ${AURORAFW_MODULES_DIR}/stdl)
 include(${AURORAFW_MODULE_STDL_DIR}/module.cmake)
 set(AURORAFW_MODULE_CORE_DIR ${AURORAFW_MODULES_DIR}/core)
 include(${AURORAFW_MODULE_CORE_DIR}/module.cmake)
