@@ -24,6 +24,13 @@
 			"cwd": "${workspaceRoot}"
 		},
 		{
+			"name": "app_tests_image",
+			"type": "gdb",
+			"request": "launch",
+			"target": "./bin/dbg/aurorafw_app_tests_image.out",
+			"cwd": "${workspaceRoot}"
+		},
+		{
 			"name": "app_tests_gui",
 			"type": "gdb",
 			"request": "launch",
