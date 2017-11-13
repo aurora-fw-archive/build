@@ -28,8 +28,10 @@ include(${CMAKE_MODULE_AURORAFW_DIR}/module.cmake)
 # Options
 option(AURORA_BUILD_TEST_APPS "Enable builds for test apps" OFF)
 
-AURORA_ADD_CMAKE_MODULE("FreeImage" CMAKE ${AURORAFW_ROOT_DIR}/cmake/freeimage/)
-AURORA_ADD_CMAKE_MODULE("PortAudio" CMAKE ${AURORAFW_ROOT_DIR}/cmake/portaudio/)
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+	AURORA_ADD_CMAKE_MODULE("FreeImage" CMAKE ${AURORAFW_ROOT_DIR}/cmake/freeimage/)
+	AURORA_ADD_CMAKE_MODULE("PortAudio" CMAKE ${AURORAFW_ROOT_DIR}/cmake/portaudio/)
+endif()
 
 # Modules
 AURORA_ADD_CMAKE_MODULE("STDL" MODULE)
