@@ -99,6 +99,7 @@ _TeamCity*
 #CMake temporary files
 CMakeCache.txt
 CMakeFiles
+CMakeTools
 CMakeScripts
 Testing
 cmake_install.cmake
@@ -128,3 +129,8 @@ Makefile
 bin/*.so
 bin/dbg/*.so
 bin/dbg/*.out
+
+.ninja_deps
+.ninja_log
+build.ninja
+rules.ninja
