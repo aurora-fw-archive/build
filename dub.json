@@ -1,0 +1,16 @@
+{
+	"name": "aurorafw",
+	"description": "A Powerful General Purpose Framework",
+	"copyright": "Copyright © 2018, Aurora Framework",
+	"authors": [
+		"Luís Ferreira"
+	],
+	"targetType": "none",
+	"targetPath": "bin",
+	"dependencies": {
+		"aurorafw:gengine-core": "*"
+	},
+	"subPackages": [
+		"./binds/d/gengine/core"
+	]
+}
