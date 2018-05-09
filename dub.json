@@ -6,11 +6,31 @@
 		"Luís Ferreira"
 	],
 	"targetType": "none",
-	"targetPath": "bin",
+	"targetPath": "out/bin",
 	"dependencies": {
-		"aurorafw:gengine-core": "*"
+		"aurorafw:gengine": "*",
+		"aurorafw:math": "*",
+		"aurorafw:core": "*",
+		"aurorafw:image": "*",
+		"aurorafw:crypto": "*",
+		"aurorafw:parser": "*",
+		"aurorafw:audio": "*",
+		"aurorafw:metadata": "*",
+		"aurorafw:ai": "*",
+		"aurorafw:cli": "*",
+		"aurorafw:gamedev": "*"
 	},
 	"subPackages": [
-		"./binds/d/gengine/core"
+		"./modules/gengine",
+		"./modules/math",
+		"./modules/core",
+		"./modules/image",
+		"./modules/crypto",
+		"./modules/parser",
+		"./modules/audio",
+		"./modules/metadata",
+		"./modules/ai",
+		"./modules/cli",
+		"./modules/gamedev"
 	]
 }
